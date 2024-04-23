@@ -31,6 +31,7 @@ services:
   sbootapp:
     build:
       dockerfile: Dockerfile
+      context: ./frontend
     container_name: api_bnex
     restart: on-failure
     depends_on:
@@ -42,6 +43,22 @@ services:
       - api_bnex_network
     environment:
       - "POSTGRES_HOST=db"
+
+  app:
+    build: 
+      dockerfile: Dockerfile
+      context: backend
+    container_name: bnextapi
+    depends_on:
+      - sbootapp
+    ports:
+      - '3000:3000'
+    networks:
+      - api_bnex_network
+    expose:
+      - '3000'
+
+
 
 networks:
   api_bnex_network:

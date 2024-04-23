@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.css'; // Importe o arquivo de estilos
+import './App.css'; 
 
 function Login({ setIsLoggedIn }) {
   const [username, setUsername] = useState('');
@@ -17,18 +17,17 @@ function Login({ setIsLoggedIn }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica de autenticação aqui
-    setIsLoggedIn(true); // Define o estado de login como true após o envio do formulário
+    setIsLoggedIn(true); 
   };
 
   return (
-    <div className="login-container"> {/* Adicione a classe login-container */}
+    <div className="login-container"> {}
       <header className="login-header">
         <h2>Bnex Produtos</h2>
         <p>Faça login para acessar sua conta</p>
       </header>
-      <form className="login-form" onSubmit={handleSubmit}> {/* Adicione a classe login-form */}
-        <div className="login-input-container"> {/* Envolve os campos de entrada em uma div */}
+      <form className="login-form" onSubmit={handleSubmit}> {}
+        <div className="login-input-container"> {}
           <label>Usuário:</label>
           <input
             type="text"
@@ -37,7 +36,7 @@ function Login({ setIsLoggedIn }) {
             onChange={handleChange}
           />
         </div>
-        <div className="login-input-container"> {/* Envolve os campos de entrada em uma div */}
+        <div className="login-input-container"> {}
           <label>Senha:</label>
           <input
             type="password"
@@ -48,7 +47,7 @@ function Login({ setIsLoggedIn }) {
         </div>
         <button type="submit">Login</button>
       </form>
-      <footer className="login-footer"> {/* Adicione o rodapé */}
+      <footer className="login-footer"> {}
         <p>&copy; Desenvolvido por Danilo Dias</p>
       </footer>
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './App.css';
 import Login from './Login';
 import Formulario from './Formulario';
@@ -22,10 +23,9 @@ function App() {
 
   //UseEffect
   useEffect(() =>{
-    fetch("http://localhost:8080/produtos/listar ")
-    .then(retorno => retorno.json())
-    .then(retorno_convertido => setProdutos(retorno_convertido));
-  }, [])
+    axios.get(`${process.env.REACT_APP_API_URL}/produtos/listar `)
+      .then(retorno => setProdutos(retorno.data));
+  }, []);
 
   //Obtendo os dados do formulário
   const aoDigitar = (e) =>{
@@ -34,97 +34,50 @@ function App() {
 
   // Cadastrar Produto
   const cadastrar = () =>{
-    fetch('http://localhost:8080/produtos/cadastrar', {
-      method:'post',
-      body:JSON.stringify(objProduto),
-      headers:{
-        'Content-type':'application/json',
-        'Accept':'application/json'
-      }
-    })
-    .then(retorno => retorno.json())
-    .then(retorno_convertido => {
-      if(retorno_convertido.mensagem !== undefined){
-        alert(retorno_convertido.mensagem);
-      } else{
-        setProdutos([...produtos, retorno_convertido])
-        alert('Produto Cadastrado com sucesso!')
-        limparFormulario();
-      }
-    })
+    axios.post(`${process.env.REACT_APP_API_URL}/produtos/cadastrar`, objProduto)
+      .then(retorno => {
+        if(retorno.data.mensagem !== undefined){
+          alert(retorno.data.mensagem);
+        } else{
+          setProdutos([...produtos, retorno.data]);
+          alert('Produto Cadastrado com sucesso!');
+          limparFormulario();
+        }
+      })
   }
 
   // Alterar Produto
   const atualizar = () =>{
-    fetch('http://localhost:8080/produtos/atualizar', {
-      method:'put',
-      body:JSON.stringify(objProduto),
-      headers:{
-        'Content-type':'application/json',
-        'Accept':'application/json'
-      }
-    })
-    .then(retorno => retorno.json())
-    .then(retorno_convertido => {
-      if(retorno_convertido.mensagem !== undefined){
-        alert(retorno_convertido.mensagem);
-      } else{
-        
-          //Mensagem
-          alert('Produto Alterado com sucesso!')
-
-          // Cópia do vetor de produtos
+    axios.put(`${process.env.REACT_APP_API_URL}/produtos/atualizar`, objProduto)
+      .then(retorno => {
+        if(retorno.data.mensagem !== undefined){
+          alert(retorno.data.mensagem);
+        } else{
+          alert('Produto Alterado com sucesso!');
           let vetorTemp = [...produtos];
-
-          // Índice
           let indice = vetorTemp.findIndex((p) => {
             return p.id === objProduto.id;
           });
-
-          //Alterar produto do vetorTemp
           vetorTemp[indice] = objProduto;
-
-          //Atualizar o vetor de produtos
           setProdutos(vetorTemp);
-
-          //Limpar o formulário
           limparFormulario();
         }
-    })
+      })
   }
 
   // Remover Produto
   const remover = () =>{
-    fetch('http://localhost:8080/produtos/deletar/'+objProduto.id, {
-      method:'delete',
-      headers:{
-        'Content-type':'application/json',
-        'Accept':'application/json'
-      }
-    })
-    .then(retorno => retorno.json())
-    .then(retorno_convertido => {
-
-      //Mensagem 
-      alert(retorno_convertido.mensagem);
-
-      // Cópia do vetor de produtos
-      let vetorTemp = [...produtos];
-
-      // Índice
-      let indice = vetorTemp.findIndex((p) => {
-        return p.id === objProduto.id;
-      });
-
-      //Remover produto do vetorTemp
-      vetorTemp.splice(indice, 1);
-
-      //Atualizar o vetor de produtos
-      setProdutos(vetorTemp);
-
-      //Limpar Formulário
-      limparFormulario();
-    })
+    axios.delete(`${process.env.REACT_APP_API_URL}/produtos/deletar/${objProduto.id}`)
+      .then(retorno => {
+        alert(retorno.data.mensagem);
+        let vetorTemp = [...produtos];
+        let indice = vetorTemp.findIndex((p) => {
+          return p.id === objProduto.id;
+        });
+        vetorTemp.splice(indice, 1);
+        setProdutos(vetorTemp);
+        limparFormulario();
+      })
   }
 
   //Limpar Formulário
@@ -143,9 +96,16 @@ function App() {
     <div>
       {isLoggedIn ? (
         <div>
-          <Formulario botao={btnCadastrar} eventoTeclado={aoDigitar} cadastrar={cadastrar} obj={objProduto}
-              cancelar={limparFormulario} remover={remover} atualizar={atualizar}/>
-          <Tabela vetor={produtos} selecionar={selecionarProduto}/>
+          <Formulario
+            botao={btnCadastrar}
+            eventoTeclado={aoDigitar}
+            cadastrar={cadastrar}
+            obj={objProduto}
+            cancelar={limparFormulario}
+            remover={remover}
+            atualizar={atualizar}
+          />
+          <Tabela vetor={produtos} selecionar={selecionarProduto} />
         </div>
       ) : (
         <Login setIsLoggedIn={setIsLoggedIn} />
@@ -155,5 +115,3 @@ function App() {
 }
 
 export default App;
-
-
