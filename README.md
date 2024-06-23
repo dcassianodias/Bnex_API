@@ -43,9 +43,6 @@ npm run migrate:latest
 
 npm start
 
-Frontend
-O frontend para este projeto é um repositório separado. Você pode encontrá-lo aqui.
-
 Para instalar e executar o frontend, siga as instruções no arquivo README.md desse repositório.
 
 Contribuição
