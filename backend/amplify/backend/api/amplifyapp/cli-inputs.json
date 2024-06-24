@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/items": {
+      "name": "/items",
+      "lambdaFunction": "appbackendamplify174804d3",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
